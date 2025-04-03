@@ -1,0 +1,154 @@
+{
+  "name": "Project2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5f3a65ed-2648-4477-97b0-3e8896098391",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/home/*.pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "235065f6-d8c4-4210-9c8e-02c6080f33ee",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "output",
+        "binaryPropertyName": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1020,
+        0
+      ],
+      "id": "5aff189b-0a3b-4fa1-bc70-d87e67875875",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "options": {
+          "purpose": "assistants"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        440,
+        0
+      ],
+      "id": "feea7e8c-88c9-41a1-9428-824b35d44d88",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "wyicEabHMUYrTdV7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_iNMY8fiAIzl6BnptyfUsKYRD",
+          "mode": "list",
+          "cachedResultName": "assistant"
+        },
+        "prompt": "define",
+        "text": "0. Remove the file type from the content\n1. Find all personal information from the file\n2. Use random information to instead those personal information\n3. Output all text from the file.\nDon't need to speak other, just follow the point above",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        640,
+        0
+      ],
+      "id": "373479bc-06d9-424c-b281-997e18583705",
+      "name": "OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "wyicEabHMUYrTdV7",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "371f2462-8aff-452f-9f58-4c59b4ba489a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc4bd19b026f8f4f4772b0940df5011c3e2ae25bc5609a0e7ccfde8973e65039"
+  },
+  "id": "ruxYXs8KTmRxSzCh",
+  "tags": []
+}
