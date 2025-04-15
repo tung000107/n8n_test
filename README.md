@@ -89,5 +89,25 @@ $$;
 Upload a document. Replace all confidential or personal information with randomized placeholders while keeping the structure intact. Ensure that names, addresses, phone numbers, emails, and any other sensitive data are anonymized while keeping the document's structure intact. The result should be a template that maintains the original formatting and context without exposing any real information. Output only the modified document without extra commentary.
 ```
 
+## Note
+- 需改善，透過Python等code進行更完善去機密化
+- 需驗證去機密化後的文件
 
+# Project3 - Idea integration
+1. 可透過前端或line chat bot進行知識儲存和文案輸出
+![alt text](<reference/Screenshot 2025-04-15 at 7.44.37 PM.png>)
 
+## 前端網頁使用方法
+- `npx serve .` 對前端建server `http://localhost:3000/test `
+- 點擊Input，輸入需要記錄的知識內容
+![alt text](<reference/Screenshot 2025-04-15 at 7.50.19 PM.png>)
+- 點擊Output
+![alt text](<reference/Screenshot 2025-04-15 at 7.51.02 PM.png>)
+
+## Line bot
+![alt text](reference/S_gainfriends_2dbarcodes_GW.png)
+- 加入line好友
+- 在對話欄輸入需要記錄的知識內容
+![alt text](reference/IMG_3090.jpg)
+- 輸入`Output`輸出整合文章
+![alt text](reference/IMG_3091.jpg)

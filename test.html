@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input/Output Buttons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #inputArea, #outputArea {
+      margin-top: 20px;
+    }
+    #outputArea {
+      white-space: pre-wrap;
+      background: #f0f0f0;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+  <!-- Include the marked.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <h1>Idea Integration</h1>
+  <button onclick="showInput()">Input</button>
+  <button onclick="sendOutput()">Output</button>
+
+  <div id="inputArea" style="display:none;">
+    <textarea id="userInput" rows="4" cols="50" placeholder="Enter your text here..."></textarea>
+    <br/>
+    <button onclick="sendInput()">Submit Input</button>
+  </div>
+
+  <div id="outputArea" style="display:none;"></div>
+
+  <script>
+    const WEBHOOK_URL = 'http://localhost:5678/webhook/knowledge-sharing?';
+
+    console.log(WEBHOOK_URL);
+
+    function showInput() {
+      document.getElementById('inputArea').style.display = 'block';
+      document.getElementById('outputArea').style.display = 'none';
+    }
+
+    async function sendInput() {
+      const inputText = document.getElementById('userInput').value;
+      if (!inputText) {
+        alert("Please enter some text first.");
+        return;
+      }
+      try {
+        const response = await fetch(WEBHOOK_URL + new URLSearchParams({
+                type: 'input',
+                content: inputText,
+        }).toString(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        alert("Input sent successfully");
+      } catch (error) {
+         alert("Error sending input: " + error);
+      }
+    }
+
+    async function sendOutput() {
+      try {
+        const response = await fetch(WEBHOOK_URL + new URLSearchParams({
+                type: 'output',
+        }).toString(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        const data = await response.json();
+
+        // Use marked.js to convert Markdown to HTML
+        const outputHtml = marked.parse(data.message.content);
+
+        document.getElementById('outputArea').style.display = 'block';
+        document.getElementById('inputArea').style.display = 'none';
+        document.getElementById('outputArea').innerHTML = outputHtml;
+      } catch (error) {
+        document.getElementById('outputArea').style.display = 'block';
+        document.getElementById('outputArea').innerText = 'Error: ' + error;
+      }
+    }
+  </script>
+</body>
+</html>

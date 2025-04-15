@@ -1,0 +1,779 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge-sharing",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -740,
+        680
+      ],
+      "id": "3e2cdd5d-95ab-40d0-82d2-7bf27c7e3c36",
+      "name": "Webhook",
+      "webhookId": "e2f3583c-d2d7-489a-a0cb-c3fc64e0e8e3"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Input complete.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        -120
+      ],
+      "id": "187ac3af-c37e-4829-b3c0-abee26c7eda3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.type }}",
+                    "rightValue": "input",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "40a27f52-590a-43b6-940f-9b91b69dca1c"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7dcb23e0-6a2c-4c16-8a1b-198548e16ab3",
+                    "leftValue": "={{ $json.query.type }}",
+                    "rightValue": "output",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c1bd26aa-da6d-44fa-824f-47d7fdd1927b",
+                    "leftValue": "={{ $json.body.events[0].message.type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a22ef156-5f7f-41e5-824d-88f2e88915d0",
+                    "leftValue": "={{ $json.query.type }}",
+                    "rightValue": "others",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -520,
+        660
+      ],
+      "id": "558e30f4-c796-4e96-9b5c-0da668d73799",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        840
+      ],
+      "id": "7e617541-df86-4869-8e9b-30856b3b162c",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "I have a database containing multiple fragmented inputs. Each input represents a specific knowledge point or piece of information, but they are not yet organized or written in a coherent way. Please analyze the content in the database and write a well-structured, integrated article that explains and introduces all the key points clearly and logically. The article should be informative, easy to understand, in detailed, and suitable for someone who is learning about this topic for the first time. Output without extra commentary.\nDon't use markdown.",
+              "role": "assistant"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        660,
+        660
+      ],
+      "id": "3c42dcf7-17fa-4f66-9c28-359a71dcdbf8",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "WCTpbp8a2wkCgG5d",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        740,
+        1080
+      ],
+      "id": "d9c2c539-047c-4474-98e6-042734035fcc",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "WCTpbp8a2wkCgG5d",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "7fa22de2-5f9d-4953-8f61-9e2e0fd4107b",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        700,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "id": "fbdbcd00-06b6-49f7-9d83-2dba085ccc49",
+      "name": "Embeddings OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [
+        580,
+        120
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "WCTpbp8a2wkCgG5d",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "8b640706-b693-4fbd-8a8a-9b9544d99551",
+      "name": "Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        800,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "project3_test",
+          "mode": "list",
+          "cachedResultName": "project3_test"
+        },
+        "options": {
+          "queryName": "match_docu"
+        }
+      },
+      "id": "85d2d726-709d-43ab-ada3-d2dff39171bb",
+      "name": "Insert into Supabase Vectorstore",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        620,
+        -120
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "Egc2R4QWbD142W5P",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "n8n_test",
+        "toolDescription": "Work with data",
+        "tableName": {
+          "__rl": true,
+          "value": "project3_test",
+          "mode": "list",
+          "cachedResultName": "project3_test"
+        },
+        "options": {
+          "queryName": "match_docu"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        880
+      ],
+      "id": "bf41f364-86b2-4a90-9f20-8350e75982dd",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Egc2R4QWbD142W5P",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Input text and insert to Vector DB\n",
+        "height": 680,
+        "width": 1320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -200
+      ],
+      "id": "9d2bbb5b-3472-43d7-a31a-6c3af8c92d20",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Output the article about the idea\n",
+        "height": 640,
+        "width": 1320,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        580
+      ],
+      "id": "8bffa111-e205-4f49-bb93-67edaec24546",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=The term is {{ $('Webhook').item.json.query.content }}. Please generate a clear, detailed explanation suitable for a knowledge-sharing bulletin or slide to be used in employee training. The explanation should define the term, explain its relevance in a workplace or business context, include examples where appropriate, and be written in a professional yet easy-to-understand tone. The goal is to educate employees who may be unfamiliar with the concept."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        520,
+        1460
+      ],
+      "id": "dc2a442e-5ded-452a-9303-6fa6a040ce2d",
+      "name": "OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "WCTpbp8a2wkCgG5d",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        620,
+        1680
+      ],
+      "id": "181ebf84-4b4b-4b58-a0db-23f7086db86d",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1460
+      ],
+      "id": "ec302ca6-9da8-48e2-815a-8fe3ad8dbaa4",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "content": "## Input a term and output an article about it.\n",
+        "height": 480,
+        "width": 820,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        1340
+      ],
+      "id": "da4e309a-de32-4e7d-af35-164dd4f6f75f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "93122f1d-af6b-40e4-b5a4-82e0e25446e7",
+              "name": "text",
+              "value": "={{ $('Webhook').item.json.body.events[0].message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        340,
+        -120
+      ],
+      "id": "dd5f0e99-b2d1-492f-8eaa-594714ae32c7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer BSO0bpdZxOIfxK8Ql9nXTk7Iwo7ggwKJY0GvJhho1KnKSTnoJ1MFrxoNuEZ4G4a2yHNCY3W1ZVX/Z3DrqYBtjnNMO2vO4b1Z/UCOEz4meL2o1693Z5EoM9Mxh47bpG/5STHvBKiuHe7zIzPR7GTw1QdB04t89/1O/w1cDnyilFU="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"replyToken\": \"{{ $json.replyToken }}\",\n  \"messages\": [\n    {\n      \"type\": \"text\",\n      \"text\": \"{{ $json.text }}\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        160
+      ],
+      "id": "d5f616ac-0008-49d4-bcec-2511144d1ee0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 確保數據存在\nconst webhookResponse = $(\"Webhook\").all();\n// const replayToken = webhookResponse[0]?.json?.body?.events[0]?.replyToken;\n// const replyTokenItem = items.find(item => item.json.body?.events?.[0]?.replyToken);\n// const outputItem = items.find(item => item.json.output);\n\n// if (!replyTokenItem || !outputItem) {\n//   throw new Error(\"缺少必要數據，請檢查 Webhook & AI Agent 節點輸出\");\n// }\n\n// 取得 `replyToken` 和 `output`\nconst replyToken = webhookResponse[0]?.json?.body?.events[0]?.replyToken;\nconst text = $input.first().json.message.content;\nlet textR = text.replace(/\\n/g, \"\").replace(/['\"]/g, \"\");\n// $input.first().json.message\n// webhookResponse[0]?.json?.body?.events[0]?.replyToken;\n\n// 回傳整理後的結果\nreturn [\n  {\n    json: {\n      replyToken: replyToken,\n      text: textR\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        660
+      ],
+      "id": "173f1270-6a5c-4bb4-89a3-5e53b483936a",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db234904-19e7-4100-ad42-cb90caba48b6",
+              "name": "text",
+              "value": "Input Complete.",
+              "type": "string"
+            },
+            {
+              "id": "958226d7-6ce6-4493-8399-faab09aa7c75",
+              "name": "replyToken",
+              "value": "={{ $('Webhook').item.json.body.events[0].replyToken }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        160
+      ],
+      "id": "9de3b053-8e74-4208-8d7c-9efe8f824675",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1bfd7be8-02b9-4d13-8212-3b8121f85b5a",
+              "leftValue": "={{ $('Webhook').item.json.body.events[0].message.text }}",
+              "rightValue": "output",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -200,
+        700
+      ],
+      "id": "89ee2900-8560-43f3-ad4e-9fbb37d7bc07",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Reply to Chat room\n",
+        "height": 240,
+        "width": 260,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        100
+      ],
+      "id": "6262a7d8-ce1a-43a4-ac34-812d17027a25",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert into Supabase Vectorstore": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "efa6476f-a1ca-462c-a2d0-198d95ab969f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9ea64045803c857b11f275e16adca7f859cdbd1dcc7234d7597433a1197249d1"
+  },
+  "id": "jKClCpxHtuNLFUMA",
+  "tags": []
+}
